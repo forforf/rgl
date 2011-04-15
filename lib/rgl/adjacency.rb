@@ -27,8 +27,13 @@ module RGL
     #
     #  RGL::DirectedAdjacencyGraph[1,2, 2,3, 2,4, 4,5].edges.to_a.to_s =>
     #    "(1-2)(2-3)(2-4)(4-5)"
+    #
+    #  This fork allows input to be of the form:
+    #    RGL::DirectedAdjacencyGraph[ [1,2], [2,3], [2,4], [4,5] ].edges_to_a.to_s
+    #      #=> "(1-2)(2-3)(2-4)(4-5)"
 
     def self.[] (*a)
+      a.flatten!
       result = new
       0.step(a.size-1, 2) { |i| result.add_edge(a[i], a[i+1]) }
       result

@@ -51,11 +51,7 @@ module ForforfRglAdjacency
     rdg.out_degree(v)
   end
 
-  def out_degree(v)
-    self.adjacent_vertices(v).size
-  end
-  
-  #Find nodes with #in_degree of 0
+  #Find vertices with in degree of 0
   #Although roots isn't strictly a digraph term (it's for trees)
   #it has the right connotation
   def roots
