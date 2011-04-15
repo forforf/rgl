@@ -12,18 +12,41 @@ require 'rake'
 require 'jeweler'
 Jeweler::Tasks.new do |gem|
   # gem is a Gem::Specification... see http://docs.rubygems.org/read/chapter/20 for more options
-  gem.name = "rgl_spec"
-  gem.homepage = "http://github.com/forforf/rgl_spec"
+  gem.name = "forforf-rgl"
+  gem.homepage = "http://github.com/forforf/rgl"
   gem.license = "MIT"
-  gem.summary = %Q{TODO: one-line summary of your gem}
-  gem.description = %Q{TODO: longer description of your gem}
-  gem.email = "dmarti21@gmail.com"
-  gem.authors = ["Dave M"]
+  gem.summary = %Q{"Ruby Graph Library"}
+  gem.description = <<-EOF
+RGL is a framework for graph data structures and algorithms.
+
+The design of the library is much influenced by the Boost Graph Library (BGL)
+which is written in C++ heavily using its template mechanism.
+
+RGL currently contains a core set of algorithm patterns:
+
+* Breadth First Search
+* Depth First Search
+
+The algorithm patterns by themselves do not compute any meaningful quantities
+over graphs, they are merely building blocks for constructing graph
+algorithms. The graph algorithms in RGL currently include:
+
+* Topological Sort
+* Connected Components
+* Strongly Connected Components
+* Transitive Closure
+* Transitive Reduction
+* Graph Condensation
+* Search cycles (contributed by Shawn Garbett)
+EOF
+  gem.email = "monora@gmail.com"
+  gem.authors = ["Horst Duchene"]
   # Include your dependencies below. Runtime dependencies are required when using your gem,
   # and development dependencies are only needed for development (ie running rake tasks, tests, etc)
-  #  gem.add_runtime_dependency 'jabber4r', '> 0.1'
+    gem.add_runtime_dependency 'stream', '>= 0.5'
   #  gem.add_development_dependency 'rspec', '> 1.2.3'
 end
+
 Jeweler::RubygemsDotOrgTasks.new
 
 require 'rake/testtask'
