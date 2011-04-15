@@ -1,3 +1,13 @@
+= This Fork
+== Updated Rakefile to Jeweler format
+
+The original rake file was renamed to origRakefile. Several of the operations
+in the original rake file are also handled by the default jeweler rakefile. 
+So things like running tests, committing, checking version, installing as gem have
+been converted to the jeweler style/syntax. Some rake tasks have not been ported
+(converting to tar/zip, counting code lines, cvs tasks). Compare the original and 
+the new Rakefile for the definitive differences.
+ 
 = Ruby Graph Library (RGL)
 
 RGL is a framework for graph data structures and algorithms.
