@@ -45,6 +45,8 @@ describe "ForforfRglAdjacency" do
   include DAGSpecH
 
   before(:each) do
+    #rgl formats shouldn't be needed if using forked rgl
+
     @complex = ComplexGraph
     @rgl_complex = @complex.flatten
     @complex_indegree = CGInDegree
@@ -68,7 +70,10 @@ describe "ForforfRglAdjacency" do
   end
 
   it "should initialize" do
-    MyDG[*@rgl_complex].should_not == nil
+    dg_old_way = MyDG[*@rgl_complex]
+    dg_old_way.vertices.size.should == 15
+    dg_nested_array = MyDG[*@complex]
+    dg_nested_array.vertices.size.should == 15
   end
 
   it "should be able to alias nils" do
