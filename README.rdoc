@@ -1,6 +1,4 @@
 = This Fork
-== Added Functionality
-
 == Updated Rakefile to Jeweler format
 
 The original rake file has been converted to the jeweler format. Several of the 
