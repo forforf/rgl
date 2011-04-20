@@ -124,7 +124,7 @@ module ForforfRglAdjacency
   #(i.e., an array of digraphs, each with two vertices)
   def atomic_graphs
     edges = self.edge_array
-    uniq_dgs = edges.map {|edge| MyDG[*edge] }
+    uniq_dgs = edges.map {|edge| self.class[*edge] }
     uniq_dgs
   end
  
