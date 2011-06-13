@@ -13,21 +13,21 @@ determing the adjacencies of a give vertex.
 Below is an example from the example/examples directory in the RGL gem. I've just changed
 blocks from the {} format to do-end format.
 
-def cycle (n)
-  RGL::ImplicitGraph.new do  |g|
-    g.vertex_iterator do |b|
-       0.upto(n-1,&b)
+    def cycle (n)
+      RGL::ImplicitGraph.new do  |g|
+        g.vertex_iterator do |b|
+           0.upto(n-1,&b)
+        end
+        g.adjacent_iterator do |x, b|
+          b.call((x+1)%n)
+        end
+        g.directed = true
+      end
     end
-    g.adjacent_iterator do |x, b|
-      b.call((x+1)%n)
-    end
-    g.directed = true
-  end
-end
 
 In this example, the method cycle will return a directed cyclic graph of length n. For example:
-cycle(3)
-#=> [(0-1), (1-2), (2-0)].
+    cycle(3)
+    #=> [(0-1), (1-2), (2-0)].
 
 Let's step through what's happening.
 Upon initialization, RGL::ImplicitGraph takes a block, as opposed to the Array used by RGL::AdjacencyGraph.
@@ -62,11 +62,11 @@ In the cycle example, the block passed into vertex_iterator is:
 { |b| 0.upto(n-1,&b) }
 
 or rewriting a bit to illustrate what's going on.
-g.vertex_interator do |b|
-  0.upto(n-1) do |i|
-    b.call(i)
-  end
-end
+    g.vertex_interator do |b|
+      0.upto(n-1) do |i|
+        b.call(i)
+      end
+    end
 
 So we iterate up to n-1 and have the block run against each iteration.  But what is the block passed
 as |b|? That's a bit more tricky. It gets called when you need to do something with the graph.
@@ -86,12 +86,14 @@ looks like this:
     end
 
 And here we can see the block for #each_vertex:
-each_vertex { |u| each_adjacent(u) { |v| yield u,v }  }
+    each_vertex { |u| each_adjacent(u) { |v| yield u,v }  }
 
-which is calling #each_adjacent with the block: { |v| yield u,v } 
+which is calling #each_adjacent with the block:
+    { |v| yield u,v } 
 
 So, for each vertex u, we iterate over each of its adjacencies, and yield the vertex and that particular adjacency to 
 the block passed to each_adjacent which was (from way back up there):
+
     g.adjacent_iterator do |x, b|
       b.call((x+1)%n)
     end
@@ -113,37 +115,37 @@ the vertices of interest, and in #adjacent_iterator would go a function that pro
 of interest.
 
 A contrived example would be to create the graph [(0-1) (1-2) (1-3) (2-4) (3-4)]
-vertices=[0,1,2,3,4]
-children= {0=>[1], 1=>[2,3], 2=>[4], 3=>[4], 4=>[]}
+    vertices=[0,1,2,3,4]
+    children= {0=>[1], 1=>[2,3], 2=>[4], 3=>[4], 4=>[]}
 Then:
-  RGL::ImplicitGraph.new { |g|
-    g.vertex_iterator { |b| vertices.each(&b) }
-    g.adjacent_iterator { |x, b|
-      children[x].each{ |y| b.call(y)}
+    RGL::ImplicitGraph.new { |g|
+      g.vertex_iterator { |b| vertices.each(&b) }
+      g.adjacent_iterator { |x, b|
+        children[x].each{ |y| b.call(y)}
+      }
     }
-  }
 
 would lazily create the graph.
 
 Now for adding custom modules
 
-module FancyStuff
-  def invert_vertices
-    self.vertices.reverse
-  end
-end
+    module FancyStuff
+      def invert_vertices
+        self.vertices.reverse
+      end
+    end
 
-g =   RGL::ImplicitGraph.new { |g|
-    g.vertex_iterator { |b| vertices.each(&b) }
-    g.adjacent_iterator { |x, b|
-      children[x].each{ |y| b.call(y)}
-    }
-  } 
+    g =   RGL::ImplicitGraph.new { |g|
+        g.vertex_iterator { |b| vertices.each(&b) }
+        g.adjacent_iterator { |x, b|
+          children[x].each{ |y| b.call(y)}
+        }
+      } 
 
-g.extend FancyStuff
+    g.extend FancyStuff
 
-p g.invert_vertices
-[4, 3, 2, 1, 0]
+    p g.invert_vertices
+    [4, 3, 2, 1, 0]
 
 
 So all the mixins below can be kept in their own module and added as needed via normal
